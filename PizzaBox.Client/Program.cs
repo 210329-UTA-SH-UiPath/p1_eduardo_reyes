@@ -30,6 +30,7 @@ namespace PizzaBox.Client
         private static void Main(string[] args)
         {
             Run();
+
         }
 
 

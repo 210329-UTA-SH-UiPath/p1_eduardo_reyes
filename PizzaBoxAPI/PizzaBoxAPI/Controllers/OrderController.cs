@@ -48,11 +48,8 @@ namespace PizzaBoxAPI.Controllers
                 if (order == null)
                     return BadRequest("Data is invalid or null");
                 order.time = DateTime.Now;
-                order.Cost = 0;
-                foreach (var pizza in order.ListOfPizzas)
-                {
-                    order.Cost += pizza.PizzaPrice;
-                }
+                //order.Cost = 0;
+                
                 repo.AddOrder(order);
                 return NoContent();
             }

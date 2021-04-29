@@ -15,13 +15,25 @@ namespace PizzaBox.Testing.Tests
         public void Test_StoreName()
         {
             // arrange
-            var sut = new ChicagoStore();
+            var sut = new Store();
 
             // act
-            var actual = sut.Name;
+            var actual = sut.StoreLocation;
 
             // assert
-            Assert.True(actual == "ChicagoStore");
+            Assert.Null(actual);
+        }
+
+        public void Test_StoreId()
+        {
+            // arrange
+            var sut = new Store();
+
+            // act
+            var actual = sut.StoreID;
+
+            // assert
+            Assert.Null(actual);
         }
     }
 }
