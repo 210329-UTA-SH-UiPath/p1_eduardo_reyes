@@ -35,7 +35,7 @@ namespace ApiStart
 		public void ConfigureServices(IServiceCollection services)
 		{
 
-			services.AddControllers();
+			services.AddControllers().AddNewtonsoftJson();
 			services.AddDbContext<PizzaBoxInformationContext>(options =>
 			options.UseSqlServer(Configuration.GetConnectionString("PizzaBox"))
 			);
@@ -46,9 +46,7 @@ namespace ApiStart
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "PizzaBox", Version = "v1" });
 			});
 
-            //services.AddDbContext<PizzaBox.Data.Entity.PizzaBoxInformationContext>(options =>
-            //	options.UseSqlServer("Server=tcp:pizzaboxapp-nick.database.windows.net,1433;Initial Catalog=PizzaBoxDB-Nick;User ID=dev;Password=<password>")
-            //);
+            
 
 
 

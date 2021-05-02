@@ -33,6 +33,8 @@ namespace PizzaBox.Data
 
         PizzaBox.Data.Entity.PizzaTopping Map(PizzaBox.Domain.Models.Toppings toppings);
 
+        PizzaBox.Data.Entity.Topping MapTop(PizzaBox.Domain.Models.Toppings toppings);
+
         //PizzaBox.Data.Entity.Order Map(PizzaBox.Domain.Models.CustomPizza pizza);
 
 

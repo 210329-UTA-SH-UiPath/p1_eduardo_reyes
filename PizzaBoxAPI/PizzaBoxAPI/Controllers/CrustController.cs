@@ -33,7 +33,7 @@ namespace PizzaBoxAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]//https://localhost:5001/api/Crust/5
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<MCrust> GetById([FromRoute] int id)
@@ -53,7 +53,68 @@ namespace PizzaBoxAPI.Controllers
             }
         }
 
-        
-        
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        public IActionResult Post([FromBody] MCrust crust)
+        {
+            try
+            {
+                if (crust == null)
+                    return BadRequest("Data is invalid or null");
+
+                //order.Cost = 0;
+
+                repo.AddCrust(crust);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        public IActionResult Put([FromBody] MCrust crust)
+        {
+            try
+            {
+
+
+                if (crust == null)
+                    return BadRequest("Data is invalid or null");
+                repo.UpdateCrust(crust);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            try
+            {
+                if (repo.GetCrustByIndex(id) == null)
+                    return BadRequest("Item does not exist");
+                repo.DeleteCrust(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
+        }
+
+
+
     }
 }

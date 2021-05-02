@@ -7,9 +7,14 @@ namespace PizzaBox.Data
 {
     public interface IRepository
     {
-        //void addPizza(PizzaBox.Domain.Models.CustomPizza pizza);
+        
 
-        public List<CustomPizza> GetAllPizzas();
+        void AddPizza(CustomPizza pizza);
+        CustomPizza GetPizzaByIndex(int Id);
+
+        void UpdatePizza(CustomPizza pizza);
+
+        void DeletePizza(int Id);
 
         List<MCustomer> GetUserAndPass();
 
@@ -22,15 +27,9 @@ namespace PizzaBox.Data
 
         void AddToppings(Toppings toppings);
 
-        void AddPizza(CustomPizza pizza);
-
-        //PizzaBox.Domain.Abstracts.APizza GetPizza(string PizzaChoice);
-
         List<Store> GetStores();
 
         Store GetStoreByIndex(int Id);
-
-        CustomPizza GetPizzaByIndex(int Id);
 
         List<MCrust> GetPizzaCrusts();
 
@@ -52,7 +51,49 @@ namespace PizzaBox.Data
         public List<CustomPizza> GetPizzasOrders();
 
         public MCustomer GetCustomerById(int Id);
-        MOrder GetOrdersById(int id);
+        MOrder GetOrderById(int id);
+
+        void UpdateOrder(MOrder order);
+
+        void DeleteOrder(int Id);
+
+        void UpdateCrust(MCrust crust);
+
+        void DeleteCrust(int Id);
+
+        void DeleteCustomer(int Id);
+
+        void AddCrust(MCrust crust);
+
+        void UpdateCustomer(MCustomer customer);
+
+        void AddSize(Size size);
+
+        void AddTopList(Toppings toppings);
+
+        List<Toppings> GetPizzaToppings();
+
+        List<Toppings> GetPizzaToppingsById(int PizzaId);
+
+        void UpdatePizzaTopping(Toppings toppings);
+
+        Toppings GetPizzaToppingById(int toppingId);
+
+        void DeletePizzaToppingById(int toppingId);
+
+        void DeleteToppingById(int toppingId);
+
+        void UpdateTopping(Toppings toppings);
+
+        void UpdateSize(Size size);
+
+        void DeleteSize(int Id);
+
+        List<CustomPizza> GetPizzaOrdersById(int Id);
+
+        CustomPizza GetPizzaOrderById(int Id);
+
+
 
         //bool AddOrderToDb(MOrder order);
 

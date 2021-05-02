@@ -157,9 +157,6 @@ namespace PizzaBox.Data
             };
         }
 
-
-
-
         public PizzaBox.Data.Entity.Pizza Map(PizzaBox.Domain.Models.CustomPizza pizza)
         {
             return new PizzaBox.Data.Entity.Pizza
@@ -182,6 +179,16 @@ namespace PizzaBox.Data
                 PizzaId = toppings.PizzaID,
                 ToppingId = (byte)toppings.Id
 
+            };
+        }
+
+        public PizzaBox.Data.Entity.Topping MapTop(PizzaBox.Domain.Models.Toppings toppings)
+        {
+            return new PizzaBox.Data.Entity.Topping
+            {
+                ToppingId = (byte)toppings.PizzaToppingID,
+                ToppingName = toppings.Name,
+                ToppingPrice = toppings.Price
             };
         }
 

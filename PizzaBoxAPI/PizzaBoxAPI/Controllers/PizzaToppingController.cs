@@ -10,12 +10,10 @@ using PizzaBox.Domain.Models;
 
 namespace PizzaBoxAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CustomerController : ControllerBase
+    public class PizzaToppingController : Controller
     {
         private readonly IRepository repo;
-        public CustomerController(IRepository repo)
+        public PizzaToppingController(IRepository repo)
         {
             this.repo = repo;
         }
@@ -23,11 +21,11 @@ namespace PizzaBoxAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> Get()
+        public ActionResult<Toppings> Get()
         {
             try
             {
-                return Ok(repo.GetCustomers());
+                return Ok(repo.GetPizzaToppings());
             }
             catch (Exception e)
             {
@@ -38,11 +36,11 @@ namespace PizzaBoxAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> GetById([FromRoute] int id)
+        public ActionResult<Toppings> GetById([FromRoute] int id)
         {
             try
             {
-                var x = repo.GetCustomerById(id);
+                var x = repo.GetPizzaToppingsById(id);
                 if (x == null)
                 {
                     return NotFound($"The item with id {id} was not found in the database.");
@@ -59,13 +57,16 @@ namespace PizzaBoxAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Post([FromBody] MCustomer customer)
+        public IActionResult Post([FromBody] Toppings topping)
         {
             try
             {
-                if (customer == null)
+                if (topping == null)
                     return BadRequest("Data is invalid or null");
-                repo.AddCustomer(customer);
+
+                //order.Cost = 0;
+
+                repo.AddToppings(topping);
                 return NoContent();
             }
             catch (Exception e)
@@ -78,15 +79,15 @@ namespace PizzaBoxAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Put([FromBody] MCustomer customer)
+        public IActionResult Put([FromBody] Toppings topping)
         {
             try
             {
 
 
-                if (customer == null)
+                if (topping == null)
                     return BadRequest("Data is invalid or null");
-                repo.UpdateCustomer(customer);
+                repo.UpdatePizzaTopping(topping);
                 return NoContent();
             }
             catch (Exception e)
@@ -95,7 +96,6 @@ namespace PizzaBoxAPI.Controllers
             }
         }
 
-
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -103,9 +103,9 @@ namespace PizzaBoxAPI.Controllers
         {
             try
             {
-                if (repo.GetCustomerById(id) == null)
-                    return BadRequest("Customer does not exist");
-                repo.DeleteCustomer(id);
+                if (repo.GetPizzaToppingById(id) == null)
+                    return BadRequest("Item does not exist");
+                repo.DeletePizzaToppingById(id);
                 return NoContent();
             }
             catch (Exception e)

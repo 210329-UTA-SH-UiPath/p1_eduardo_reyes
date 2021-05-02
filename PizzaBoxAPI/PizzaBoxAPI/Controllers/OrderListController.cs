@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PizzaBox.Data;
 using PizzaBox.Domain.Models;
 
@@ -12,22 +13,25 @@ namespace PizzaBoxAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class OrderListController : Controller
     {
-        private readonly IRepository repo;
-        public CustomerController(IRepository repo)
-        {
-            this.repo = repo;
-        }
+        
+            private readonly PizzaBox.Data.IRepository repo;
+            public OrderListController(IRepository repo)
+            {
+                this.repo = repo;
+            }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> Get()
+        public ActionResult<MOrder> Get()
         {
             try
             {
-                return Ok(repo.GetCustomers());
+                var orders = repo.GetAllOrders();
+                var json = JsonConvert.SerializeObject(orders);
+                return Ok(orders);
             }
             catch (Exception e)
             {
@@ -38,34 +42,34 @@ namespace PizzaBoxAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> GetById([FromRoute] int id)
+        public ActionResult<MOrder> GetById([FromRoute] int id)
         {
             try
-            {
-                var x = repo.GetCustomerById(id);
+             {
+                var x = repo.GetOrderById(id);
                 if (x == null)
-                {
+                 {
                     return NotFound($"The item with id {id} was not found in the database.");
-                }
+                 }
                 return Ok(x);
-            }
-            catch (Exception e)
-            {
+             }
+             catch (Exception e)
+             {
                 return StatusCode(400, e.Message);
-            }
+             }
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Post([FromBody] MCustomer customer)
+        public IActionResult Post([FromBody] MOrder order)
         {
             try
             {
-                if (customer == null)
+                if (order == null)
                     return BadRequest("Data is invalid or null");
-                repo.AddCustomer(customer);
+                repo.AddOrder(order);
                 return NoContent();
             }
             catch (Exception e)
@@ -78,15 +82,15 @@ namespace PizzaBoxAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Put([FromBody] MCustomer customer)
+        public IActionResult Put([FromBody] MOrder order)
         {
             try
             {
 
-
-                if (customer == null)
+                
+                if (order == null)
                     return BadRequest("Data is invalid or null");
-                repo.UpdateCustomer(customer);
+                repo.UpdateOrder(order);
                 return NoContent();
             }
             catch (Exception e)
@@ -94,7 +98,6 @@ namespace PizzaBoxAPI.Controllers
                 return StatusCode(400, e.Message);
             }
         }
-
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -103,9 +106,9 @@ namespace PizzaBoxAPI.Controllers
         {
             try
             {
-                if (repo.GetCustomerById(id) == null)
-                    return BadRequest("Customer does not exist");
-                repo.DeleteCustomer(id);
+                if (repo.GetOrderById(id) == null)
+                    return BadRequest("Item does not exist");
+                repo.DeleteOrder(id);
                 return NoContent();
             }
             catch (Exception e)
@@ -113,5 +116,7 @@ namespace PizzaBoxAPI.Controllers
                 return StatusCode(400, e.Message);
             }
         }
+
+
     }
 }

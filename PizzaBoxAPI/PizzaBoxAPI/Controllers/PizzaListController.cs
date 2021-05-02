@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PizzaBox.Data;
+using PizzaBox.Data.Entity;
 using PizzaBox.Domain.Models;
 
 namespace PizzaBoxAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class PizzaListController : ControllerBase
     {
         private readonly IRepository repo;
-        public CustomerController(IRepository repo)
+
+        public PizzaListController(IRepository repo)
         {
             this.repo = repo;
         }
@@ -23,26 +25,26 @@ namespace PizzaBoxAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> Get()
+        public ActionResult<CustomPizza> Get()
         {
             try
             {
-                return Ok(repo.GetCustomers());
+                return Ok(repo.GetPizzasOrders());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return StatusCode(400, e.Message);
+                return StatusCode(400, ex.Message);
             }
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<MCustomer> GetById([FromRoute] int id)
+        public ActionResult<MOrder> GetById([FromRoute] int id)
         {
             try
             {
-                var x = repo.GetCustomerById(id);
+                var x = repo.GetPizzaOrdersById(id);
                 if (x == null)
                 {
                     return NotFound($"The item with id {id} was not found in the database.");
@@ -59,13 +61,16 @@ namespace PizzaBoxAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Post([FromBody] MCustomer customer)
+        public IActionResult Post([FromBody] CustomPizza pizza)
         {
             try
             {
-                if (customer == null)
+                if (pizza == null)
                     return BadRequest("Data is invalid or null");
-                repo.AddCustomer(customer);
+                
+                //order.Cost = 0;
+                
+                repo.AddPizza(pizza);
                 return NoContent();
             }
             catch (Exception e)
@@ -78,15 +83,15 @@ namespace PizzaBoxAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public IActionResult Put([FromBody] MCustomer customer)
+        public IActionResult Put([FromBody] CustomPizza pizza)
         {
             try
             {
 
 
-                if (customer == null)
+                if (pizza == null)
                     return BadRequest("Data is invalid or null");
-                repo.UpdateCustomer(customer);
+                repo.UpdatePizza(pizza);
                 return NoContent();
             }
             catch (Exception e)
@@ -94,7 +99,6 @@ namespace PizzaBoxAPI.Controllers
                 return StatusCode(400, e.Message);
             }
         }
-
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -103,9 +107,9 @@ namespace PizzaBoxAPI.Controllers
         {
             try
             {
-                if (repo.GetCustomerById(id) == null)
-                    return BadRequest("Customer does not exist");
-                repo.DeleteCustomer(id);
+                if (repo.GetPizzaOrderById(id) == null)
+                    return BadRequest("Item does not exist");
+                repo.DeletePizza(id);
                 return NoContent();
             }
             catch (Exception e)
@@ -113,5 +117,9 @@ namespace PizzaBoxAPI.Controllers
                 return StatusCode(400, e.Message);
             }
         }
+
+
+
+
     }
 }
